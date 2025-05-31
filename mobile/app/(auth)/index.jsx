@@ -1,46 +1,70 @@
-import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Image, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 import { useRouter } from 'expo-router'
 import login from '../../assets/illustrations/login.png'
 import AppColors from '../../constants/Colors'
+import { Ionicons } from '@expo/vector-icons'
 
 const Login = () => {
     const router = useRouter();
+
+    const [showPassword, setShowPassword] = useState(false);
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
-        <View style={styles.outerContainer}>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <View style={styles.outerContainer}>
 
-            <View style={styles.contentContainer}>
+                <View style={styles.contentContainer}>
 
-                <View style={styles.formGroup}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.headerTitle} >Welcome Back!</Text>
-                        <Text style={styles.headerText} >
-                            Please login to continue using MeatCheck
-                        </Text>
-                    </View>
-                    <Text style={styles.labelText}>Email</Text>
-                    <TextInput
-                        style={styles.inputGroup}
-                        placeholder="Enter your email"
-                    />
-                    <Text style={styles.labelText}>Password</Text>
-                    <TextInput
-                        style={styles.inputGroup}
-                        placeholder="Enter your password"
-                        secureTextEntry={true}
-                    />
-                    <TouchableOpacity style={styles.buttonGroup}>
-                        <Text style={styles.buttonText}>Login</Text>
-                    </TouchableOpacity>
-                    <View style={styles.linkGroup}>
-                        <Text style={styles.linkText2} >Already have an Account?</Text>
-                        <TouchableOpacity onPress={() => router.push('/(auth)/signup')}>
-                            <Text style={styles.linkText}>Sign Up</Text>
+                    <View style={styles.formGroup}>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.headerTitle} >Welcome Back!</Text>
+                            <Text style={styles.headerText} >
+                                Please login to continue using MeatCheck
+                            </Text>
+                        </View>
+                        <Text style={styles.labelText}>Email</Text>
+                        <TextInput
+                            style={styles.inputGroup}
+                            placeholder="Enter your email"
+                            keyboardType='email-address'
+                        />
+                        <Text style={styles.labelText}>Password</Text>
+
+                        <View style={styles.passwordInput}>
+                            <TextInput
+                                style={styles.inputGroup}
+                                placeholder="Enter your password"
+                                secureTextEntry={!showPassword}
+                            />
+                            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.passwordButton}>
+                                <Ionicons
+                                    name={showPassword ? "eye-outline" : "eye-off-outline"}
+                                    size={20}
+                                    color={AppColors.primary[500]}
+                                    style={styles.eyeIcon}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity style={styles.buttonGroup}>
+                            <Text style={styles.buttonText}>Login</Text>
                         </TouchableOpacity>
+                        <View style={styles.linkGroup}>
+                            <Text style={styles.linkText2} >Already have an Account?</Text>
+                            <TouchableOpacity onPress={() => router.push('/(auth)/signup')}>
+                                <Text style={styles.linkText}>Sign Up</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -131,4 +155,13 @@ const styles = StyleSheet.create({
         fontWeight: 'semibold',
         fontSize: 16,
     },
+    passwordInput: {
+        position: 'relative',
+    },
+
+    passwordButton: {
+        position: 'absolute',
+        right: 10,
+        top: 12,
+    }
 })

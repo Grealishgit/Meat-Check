@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import signup from '../../assets/illustrations/signup.png'
 import AppColors from '../../constants/Colors'
@@ -6,6 +6,10 @@ import AppColors from '../../constants/Colors'
 const SignUp = () => {
     const router = useRouter();
     return (
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
         <View style={styles.outerContainer}>
 
             <View style={styles.contentContainer}>
@@ -46,7 +50,7 @@ const SignUp = () => {
                 </View>
             </View>
         </View>
-
+        </KeyboardAvoidingView>
     )
 }
 
