@@ -26,7 +26,8 @@ const Login = () => {
                         <View style={styles.textContainer}>
                             <Text style={styles.headerTitle} >Welcome Back!</Text>
                             <Text style={styles.headerText} >
-                                Please login to continue using MeatCheck
+                                Please login to continue using
+                                <Text style={styles.spanText} > MeatCheck</Text> 
                             </Text>
                         </View>
                         <Text style={styles.labelText}>Email</Text>
@@ -163,5 +164,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 10,
         top: 12,
+    },
+    spanText: {
+        color: AppColors.primary[500],
+        fontWeight: 'bold',
     }
 })
