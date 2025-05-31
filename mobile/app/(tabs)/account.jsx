@@ -13,17 +13,25 @@ const ProfilePage = () => {
         <>
             <SafeAreaView style={styles.safeView}>
             </SafeAreaView>
+            <View style={styles.headerView}>
+                <Text style={styles.headerTitle} >Profile</Text>
+            </View>
             <View style={styles.profileContainer}>
+
+                <View style={styles.profileCard}>
                 <View style={styles.avatarContainer}>
                     <View style={styles.avatar}>
                         <Text style={styles.avatarText}>{user.name[0]}</Text>
                     </View>
-                </View>
+                    </View>
+                    <View>
                 <Text style={styles.profileName}>{user.name}</Text>
                 <Text style={styles.profileEmail}>{user.email}</Text>
                 <View style={styles.profileDetails}>
                     <Text style={styles.profileLabel}>Member since:</Text>
                     <Text style={styles.profileValue}>{user.joined}</Text>
+                        </View>
+                    </View>
                 </View>
             </View>
         </>
@@ -35,13 +43,34 @@ export default ProfilePage
 const styles = StyleSheet.create({
     safeView: {
         paddingTop: Platform.OS === 'android' ? 35 : 0,
+        backgroundColor: '#fcfcfc',
     },
     profileContainer: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#fcfcfc',
         padding: 24,
+    },
+    headerView: {
+        backgroundColor: '#ffffff',
+    },
+    headerTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: AppColors.primary[500],
+        marginLeft: 16,
+    },
+    profileCard: {
+        width: '100%',
+        borderWidth: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginBottom: 16,
+        borderRadius: 8,
+        padding: 16,
+        backgroundColor: AppColors.primary[100],
+        borderColor: AppColors.primary[500],
     },
     avatarContainer: {
         marginBottom: 16,
@@ -49,8 +78,8 @@ const styles = StyleSheet.create({
     avatar: {
         width: 80,
         height: 80,
-        borderRadius: 40,
-        backgroundColor: AppColors.primary[200],
+        borderRadius: 50,
+        backgroundColor: '#ffffff',
         alignItems: 'center',
         justifyContent: 'center',
     },
