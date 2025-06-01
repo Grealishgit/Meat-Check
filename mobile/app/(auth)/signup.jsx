@@ -70,7 +70,7 @@ const SignUp = () => {
                                 />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.buttonGroup}>
+                        <TouchableOpacity style={styles.buttonGroup} onPress={() => router.push('/(tabs)/')}>
                             <Text style={styles.buttonText}>Return Home</Text>
                         </TouchableOpacity>
                         <View style={styles.linkGroup}>
