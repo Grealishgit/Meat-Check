@@ -53,8 +53,8 @@ const Login = () => {
                                 />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.buttonGroup}>
-                            <Text style={styles.buttonText}>Login</Text>
+                        <TouchableOpacity style={styles.buttonGroup} onPress={() => router.push('/(tabs)/')}>
+                            <Text style={styles.buttonText}>Home</Text>
                         </TouchableOpacity>
                         <View style={styles.linkGroup}>
                             <Text style={styles.linkText2} >Already have an Account?</Text>
