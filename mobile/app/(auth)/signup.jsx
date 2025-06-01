@@ -71,7 +71,7 @@ const SignUp = () => {
                             </TouchableOpacity>
                         </View>
                         <TouchableOpacity style={styles.buttonGroup}>
-                            <Text style={styles.buttonText}>Sign Up</Text>
+                            <Text style={styles.buttonText}>Return Home</Text>
                         </TouchableOpacity>
                         <View style={styles.linkGroup}>
                             <Text style={styles.linkText2} >Already have an Account?</Text>
