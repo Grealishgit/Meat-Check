@@ -75,7 +75,8 @@ const UploadsPage = () => {
                                         <Text style={styles.cardTitle}>{item.name}</Text>
                                     </View>
                                     <View style={styles.cardContent}>
-                                        <Text style={styles.cardType}>Type: <Text style={{ color: item.type === 'red' ? '#d32f2f' : '#388e3c' }}>{item.type}</Text></Text>
+                                        <Text style={styles.cardType}>Type:
+                                            <Text style={{ color: item.type === 'red' ? '#d32f2f' : '#388e3c' }}>{item.type}</Text></Text>
                                         <Text style={styles.cardDescriptionText}>Description: </Text>
                                         <Text style={styles.cardDescription}>{item.description}</Text>
                                     </View>
