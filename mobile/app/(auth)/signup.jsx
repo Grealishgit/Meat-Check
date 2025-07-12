@@ -1,19 +1,51 @@
-import { Image, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator } from 'react-native'
 import { useRouter } from 'expo-router'
 import signup from '../../assets/illustrations/signup.png'
 import { Ionicons } from '@expo/vector-icons'
 import AppColors from '../../constants/Colors'
 import { useState } from 'react'
+import { useAuth } from '../../contexts/AuthContext'
 
 const SignUp = () => {
     const router = useRouter();
+    const { signup, loading } = useAuth();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
     const toggleConfirmPasswordVisibility = () => {
         setShowConfirmPassword(!showConfirmPassword);
+    };
+
+    const handleSignup = async () => {
+        if (!email || !password || !confirmPassword) {
+            Alert.alert('Error', 'Please fill in all fields');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert('Error', 'Passwords do not match');
+            return;
+        }
+
+        if (password.length < 6) {
+            Alert.alert('Error', 'Password must be at least 6 characters long');
+            return;
+        }
+
+        try {
+            await signup(email, password);
+            Alert.alert('Success', 'Account created successfully!');
+            router.push('/(tabs)/');
+        } catch (error) {
+            Alert.alert('Signup Failed', error.message || 'Please try again');
+        }
     };
     return (
         <KeyboardAvoidingView
@@ -35,6 +67,10 @@ const SignUp = () => {
                         <TextInput
                             style={styles.inputGroup}
                             placeholder="Enter your email"
+                            keyboardType='email-address'
+                            value={email}
+                            onChangeText={setEmail}
+                            autoCapitalize="none"
                         />
                         <Text style={styles.labelText}>Your Password</Text>
 
@@ -43,7 +79,8 @@ const SignUp = () => {
                                 style={styles.inputGroup}
                                 placeholder="Enter your password"
                                 secureTextEntry={!showPassword}
-
+                                value={password}
+                                onChangeText={setPassword}
                             />
                             <TouchableOpacity onPress={togglePasswordVisibility} style={styles.passwordButton}>
                                 <Ionicons
@@ -60,6 +97,8 @@ const SignUp = () => {
                                 style={styles.inputGroup}
                                 placeholder="Confirm your password"
                                 secureTextEntry={!showConfirmPassword}
+                                value={confirmPassword}
+                                onChangeText={setConfirmPassword}
                             />
                             <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.passwordButton}>
                                 <Ionicons
@@ -70,8 +109,16 @@ const SignUp = () => {
                                 />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.buttonGroup} onPress={() => router.push('/(tabs)/')}>
-                            <Text style={styles.buttonText}>Return Home</Text>
+                        <TouchableOpacity
+                            style={[styles.buttonGroup, loading && styles.disabledButton]}
+                            onPress={handleSignup}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <ActivityIndicator size="small" color="white" />
+                            ) : (
+                                <Text style={styles.buttonText}>Create Account</Text>
+                            )}
                         </TouchableOpacity>
                         <View style={styles.linkGroup}>
                             <Text style={styles.linkText2} >Already have an Account?</Text>
@@ -152,6 +199,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         marginTop: 10
+    },
+    disabledButton: {
+        opacity: 0.6,
     },
     buttonText: {
         color: 'white',

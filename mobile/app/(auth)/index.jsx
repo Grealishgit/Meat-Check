@@ -1,16 +1,36 @@
-import { Image, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { useRouter } from 'expo-router'
 import login from '../../assets/illustrations/login.png'
 import AppColors from '../../constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
+import { useAuth } from '../../contexts/AuthContext'
 
 const Login = () => {
     const router = useRouter();
+    const { login, loading } = useAuth();
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
+    };
+
+    const handleLogin = async () => {
+        if (!email || !password) {
+            Alert.alert('Error', 'Please fill in all fields');
+            return;
+        }
+
+        try {
+            await login(email, password);
+            Alert.alert('Success', 'Login successful!');
+            router.push('/(tabs)/');
+        } catch (error) {
+            Alert.alert('Login Failed', error.message || 'Please check your credentials');
+        }
     };
 
     return (
@@ -35,6 +55,9 @@ const Login = () => {
                             style={styles.inputGroup}
                             placeholder="Enter your email"
                             keyboardType='email-address'
+                            value={email}
+                            onChangeText={setEmail}
+                            autoCapitalize="none"
                         />
                         <Text style={styles.labelText}>Password</Text>
 
@@ -43,6 +66,8 @@ const Login = () => {
                                 style={styles.inputGroup}
                                 placeholder="Enter your password"
                                 secureTextEntry={!showPassword}
+                                value={password}
+                                onChangeText={setPassword}
                             />
                             <TouchableOpacity onPress={togglePasswordVisibility} style={styles.passwordButton}>
                                 <Ionicons
@@ -53,11 +78,19 @@ const Login = () => {
                                 />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.buttonGroup} onPress={() => router.push('/(tabs)/')}>
-                            <Text style={styles.buttonText}>Home</Text>
+                        <TouchableOpacity
+                            style={[styles.buttonGroup, loading && styles.disabledButton]}
+                            onPress={handleLogin}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <ActivityIndicator size="small" color="white" />
+                            ) : (
+                                <Text style={styles.buttonText}>Login</Text>
+                            )}
                         </TouchableOpacity>
                         <View style={styles.linkGroup}>
-                            <Text style={styles.linkText2} >Already have an Account?</Text>
+                            <Text style={styles.linkText2} >Don't have an Account?</Text>
                             <TouchableOpacity onPress={() => router.push('/(auth)/signup')}>
                                 <Text style={styles.linkText}>Sign Up</Text>
                             </TouchableOpacity>
@@ -135,6 +168,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         marginTop: 10
+    },
+    disabledButton: {
+        opacity: 0.6,
     },
     buttonText: {
         color: 'white',

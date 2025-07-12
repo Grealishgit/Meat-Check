@@ -1,14 +1,16 @@
-import { Platform, View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
+import { Platform, View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Image, Alert, ActivityIndicator } from 'react-native';
 import Appcolor from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import AppColors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
+import { useAuth } from '../../contexts/AuthContext';
 
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { user, logout } = useAuth();
   const [captureImage, setCaptureImage] = useState(true);
   const [uploadImage, setUploadImage] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -54,13 +56,20 @@ export default function HomeScreen() {
       setSelectedImage(result.assets[0].uri);
     }
   };
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/(auth)/');
+  };
+
   return (
     <>
       <SafeAreaView
         style={styles.safeView} >
         <View style={styles.headerContainer} >
-          <Text style={styles.headerTitle} >Good Evening User! </Text>
-          <TouchableOpacity style={styles.logoutButton} onPress={() => router.push('/(auth)/login')}>
+          <Text style={[styles.headerTitle, { textTransform: 'capitalize' }]} >Hello {user?.email.length > 10
+            && user.email.slice(0, 6) || 'User'}👋 </Text>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
             <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Logout</Text>
             <Ionicons
               name="log-out-outline"
