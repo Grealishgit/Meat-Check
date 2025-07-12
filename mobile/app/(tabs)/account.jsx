@@ -1,14 +1,11 @@
 import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AppColors from '@/constants/Colors';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ProfilePage = () => {
-    // Example user data (replace with real data or props as needed)
-    const user = {
-        name: 'User Name',
-        email: 'username@email.com',
-        joined: 'June 2025',
-    };
+    const { user, logout } = useAuth();
+
     return (
         <>
             <SafeAreaView style={styles.safeView}>
@@ -21,15 +18,15 @@ const ProfilePage = () => {
                 <View style={styles.profileCard}>
                 <View style={styles.avatarContainer}>
                     <View style={styles.avatar}>
-                        <Text style={styles.avatarText}>{user.name[0]}</Text>
+                            {/* <Text style={styles.avatarText}>{user?.email}</Text> */}
                     </View>
                     </View>
                     <View>
-                <Text style={styles.profileName}>{user.name}</Text>
+                        {/* <Text style={styles.profileName}>{user.name}</Text> */}
                 <Text style={styles.profileEmail}>{user.email}</Text>
                 <View style={styles.profileDetails}>
-                    <Text style={styles.profileLabel}>Member since:</Text>
-                    <Text style={styles.profileValue}>{user.joined}</Text>
+                            <Text style={styles.profileLabel}>Member since: {user.createdAt} </Text>
+                            {/* <Text style={styles.profileValue}>{user.joined}</Text> */}
                         </View>
                     </View>
                 </View>

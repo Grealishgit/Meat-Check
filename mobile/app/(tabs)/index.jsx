@@ -68,7 +68,7 @@ export default function HomeScreen() {
         style={styles.safeView} >
         <View style={styles.headerContainer} >
           <Text style={[styles.headerTitle, { textTransform: 'capitalize' }]} >Hello {user?.email.length > 10
-            && user.email.slice(0, 6) || 'User'}👋 </Text>
+            && user.email.slice(0, 3) || 'User'}👋 </Text>
           <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
             <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Logout</Text>
             <Ionicons
@@ -156,18 +156,6 @@ export default function HomeScreen() {
           />
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.submitButton} onPress={() => router.push('/(auth)/')}>
-
-          <Ionicons
-            name="person-circle-outline"
-            size={24}
-            color="white"
-            style={styles.buttonIcon}
-          />
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-
-
       </View>
     </>
   );
