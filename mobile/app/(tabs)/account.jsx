@@ -1,32 +1,35 @@
-import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { Image, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AppColors from '@/constants/Colors';
 import { useAuth } from '@/contexts/AuthContext';
+import { formatFullDate } from '../../utils/index';
 
 const ProfilePage = () => {
     const { user, logout } = useAuth();
 
     return (
         <>
-            <SafeAreaView style={styles.safeView}>
-            </SafeAreaView>
+            <SafeAreaView style={styles.safeView} />
             <View style={styles.headerView}>
-                <Text style={styles.headerTitle} >Profile</Text>
+                <Text style={styles.headerTitle}>Profile</Text>
             </View>
             <View style={styles.profileContainer}>
-
                 <View style={styles.profileCard}>
-                <View style={styles.avatarContainer}>
-                    <View style={styles.avatar}>
-                            {/* <Text style={styles.avatarText}>{user?.email}</Text> */}
-                    </View>
+                    <View style={styles.avatarContainer}>
+                        <View style={styles.avatar}>
+                            <Image
+                                source={{ uri: "https://avatar.iran.liara.run/public/87" }}
+                                style={{ width: 80, height: 80, borderRadius: 50, borderWidth: 2, borderColor: 'red' }}
+                            />
+                        </View>
                     </View>
                     <View>
-                        {/* <Text style={styles.profileName}>{user.name}</Text> */}
-                <Text style={styles.profileEmail}>{user.email}</Text>
-                <View style={styles.profileDetails}>
-                            <Text style={styles.profileLabel}>Member since: {user.createdAt} </Text>
-                            {/* <Text style={styles.profileValue}>{user.joined}</Text> */}
+                        <Text style={styles.profileEmail}>{user.email}</Text>
+                        <View style={styles.profileDetails}>
+                            <View style={{ flexDirection: 'column' }}>
+                                <Text style={styles.profileLabel}>Member since:</Text>
+                                <Text style={styles.profileValue}>{formatFullDate(user.createdAt)}</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     },
     profileLabel: {
         fontSize: 15,
-        color: '#888',
+        color: 'red',
         marginRight: 4,
     },
     profileValue: {
