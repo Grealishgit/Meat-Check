@@ -1,15 +1,59 @@
-import { Platform, View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Image } from 'react-native';
+import { Platform, View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
 import Appcolor from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import AppColors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
+import * as ImagePicker from 'expo-image-picker';
 
 
 export default function HomeScreen() {
   const router = useRouter();
   const [captureImage, setCaptureImage] = useState(true);
   const [uploadImage, setUploadImage] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const pickImageFromCamera = async () => {
+    // Request camera permissions
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission Denied', 'Sorry, we need camera permissions to make this work!');
+      return;
+    }
+
+    // Launch camera
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
+  const pickImageFromGallery = async () => {
+    // Request media library permissions
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission Denied', 'Sorry, we need gallery permissions to make this work!');
+      return;
+    }
+
+    // Launch gallery
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
   return (
     <>
       <SafeAreaView
@@ -38,6 +82,7 @@ export default function HomeScreen() {
             onPress={() => {
               setCaptureImage(true);
               setUploadImage(false);
+              setSelectedImage(null); // Clear image when switching modes
             }}>
             <Text style={styles.actionButtonText} >Capture</Text>
           </TouchableOpacity >
@@ -48,6 +93,7 @@ export default function HomeScreen() {
             onPress={() => {
               setUploadImage(true);
               setCaptureImage(false);
+              setSelectedImage(null); // Clear image when switching modes
             }}>
             <Text style={styles.actionButtonText} >Upload </Text>
           </TouchableOpacity >
@@ -55,30 +101,38 @@ export default function HomeScreen() {
 
         {captureImage && (
           <View style={styles.formGroup}>
-            <TouchableOpacity style={[styles.imagePicker]} >
-              <View style={styles.placeholderContainer}>
-                <Ionicons
-                  name="camera-outline"
-                  size={40}
-                  color={AppColors.primary[500]}
-                />
-                <Text style={styles.placeholderText}>Tap to take an Image</Text>
-              </View>
+            <TouchableOpacity style={[styles.imagePicker]} onPress={pickImageFromCamera}>
+              {selectedImage ? (
+                <Image source={{ uri: selectedImage }} style={styles.previewImage} />
+              ) : (
+                <View style={styles.placeholderContainer}>
+                  <Ionicons
+                    name="camera-outline"
+                    size={40}
+                    color={AppColors.primary[500]}
+                  />
+                  <Text style={styles.placeholderText}>Tap to take an Image</Text>
+                </View>
+              )}
             </TouchableOpacity>
           </View>
         )}
 
         {!captureImage && (
           <View style={styles.formGroup}>
-            <TouchableOpacity style={styles.imagePicker} >
-              <View style={styles.placeholderContainer}>
-                <Ionicons
-                  name="cloud-upload-outline"
-                  size={40}
-                  color={AppColors.primary[500]}
-                />
-                <Text style={styles.placeholderText}>Tap to upload an Image</Text>
-              </View>
+            <TouchableOpacity style={styles.imagePicker} onPress={pickImageFromGallery}>
+              {selectedImage ? (
+                <Image source={{ uri: selectedImage }} style={styles.previewImage} />
+              ) : (
+                <View style={styles.placeholderContainer}>
+                  <Ionicons
+                    name="cloud-upload-outline"
+                    size={40}
+                    color={AppColors.primary[500]}
+                  />
+                  <Text style={styles.placeholderText}>Tap to upload an Image</Text>
+                </View>
+              )}
             </TouchableOpacity>
           </View>
         )}
