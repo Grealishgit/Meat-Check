@@ -72,7 +72,7 @@ Meat-Check/
 - `mobile/`: React Native mobile app (Expo)
 
 ## License
-Specify your license here.
+MIT
 
 ---
 *By Hunter*
