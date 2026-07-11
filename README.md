@@ -28,7 +28,7 @@ Meat-Check/
 - **Tech Stack:** Node.js
 - **Entry Point:** `server.js`
 - **Dependencies:** See `backend/package.json`
-- **Environment Variables:** Use a `.env` file (see `.gitignore`)
+- **Environment Variables:**
 
 ## Mobile App
 - **Location:** `mobile/`
@@ -68,11 +68,11 @@ Meat-Check/
    ```
 
 ## Folder Descriptions
-- `backend/`: Node.js backend server
+- `backend/`: Node.js+Express backend server
 - `mobile/`: React Native mobile app (Expo)
 
 ## License
 MIT
 
 ---
-*By Hunter*
+*By Hunter | Grealishgit*
